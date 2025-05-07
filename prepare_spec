@@ -24,6 +24,9 @@ use File::Basename;
 our $debug        = 0;
 our $base_package = "";
 our $header_name;
+our $thisyear = $ENV{COPYRIGHT_YEAR};
+$thisyear ||= localtime($ENV{SOURCE_DATE_EPOCH} || time)->year() + 1900;
+
 
 {
 
@@ -506,8 +509,6 @@ our $header_name;
     }
     print "$self->{vim_mode}\n" if $self->{vim_mode};
 
-    my $thisyear = $ENV{COPYRIGHT_YEAR};
-    $thisyear ||= localtime($ENV{SOURCE_DATE_EPOCH} || time)->year() + 1900;
     my @copyrights = @{$self->{copyright} || []};
     unshift @copyrights, "# Copyright (c) $thisyear SUSE LLC" unless(grep /SUSE LLC/, @copyrights);
 
@@ -619,7 +620,7 @@ EOF
     my ($self, $line) = @_;
     my $copyright = $line;
     # we update old SUSE legal entities to the current one
-    $copyright =~ s{\s*(?:copyrights?) (?:\(c\) )?((?:2\d\d\d )?)suse (?:linux )?(?:products )?(?:gmbh|llc)?,?\s*(?:nuremberg|n..?rnberg)?,?(?:\s*germany\W+)?\s*}{ Copyright (c) $1SUSE LLC}i;
+    $copyright =~ s{\s*(?:copyrights?) (?:\(c\) )?((?:2\d\d\d )?)suse (?:linux )?(?:products )?(?:gmbh|llc)?,?\s*(?:nuremberg|n..?rnberg)?,?(?:\s*germany\W+)?\s*}{ Copyright (c) ${thisyear} SUSE LLC}i;
 
     if (length($copyright) <= 5) {    # not much left
       return;
