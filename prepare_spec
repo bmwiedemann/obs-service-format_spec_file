@@ -625,7 +625,7 @@ EOF
     if (length($copyright) <= 5) {    # not much left
       return;
     }
-    $self->find("preamble")->add_copyright($copyright);
+    $self->find("preamble")->add_copyright($copyright) unless($copyright =~ /SUSE LLC/ and grep /SUSE LLC/, @{$self->find("preamble")->{copyright} || []})
   }
 
   sub add_to_current_section {
